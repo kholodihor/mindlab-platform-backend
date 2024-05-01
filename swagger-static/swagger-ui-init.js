@@ -14,17 +14,22 @@ window.onload = function() {
       "/user": {
         "post": {
           "operationId": "UserController_createUser",
+          "summary": "Створення користувача",
           "parameters": [],
           "responses": {
             "201": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Users"
+          ]
         }
       },
       "/user/{idOrEmail}": {
         "get": {
           "operationId": "UserController_findOneUser",
+          "summary": "Отримання користувача по ID чи по email",
           "parameters": [
             {
               "name": "idOrEmail",
@@ -39,12 +44,16 @@ window.onload = function() {
             "200": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Users"
+          ]
         }
       },
       "/user/{id}": {
         "delete": {
           "operationId": "UserController_deleteUser",
+          "summary": "Видалення користувача",
           "parameters": [
             {
               "name": "id",
@@ -56,10 +65,13 @@ window.onload = function() {
             }
           ],
           "responses": {
-            "200": {
+            "204": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Users"
+          ]
         }
       }
     },
