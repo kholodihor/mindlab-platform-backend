@@ -13,8 +13,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 @ApiTags('Users')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {
-  }
+  constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: 'Створення користувача' })
   @ApiResponse({ status: 201 })

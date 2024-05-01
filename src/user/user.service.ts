@@ -5,9 +5,7 @@ import { hashSync } from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly prismaService: PrismaService,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async save(user: Partial<User>) {
     const candidate = await this.findOne(user.email);
