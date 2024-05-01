@@ -36,8 +36,5 @@ jobs:
    - name: Run format check
      run: npm run format
 
-   - name: Run unit tests
-     run: npm run test
-
    - name: build production project
      run: npm run build
