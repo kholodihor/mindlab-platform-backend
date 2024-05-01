@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { join } from 'path';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { UserModule } from './user/user.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -14,8 +14,10 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger',
     }),
     CloudinaryModule,
+    UserModule,
+    PrismaModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

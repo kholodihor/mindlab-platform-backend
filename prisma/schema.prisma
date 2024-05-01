@@ -14,8 +14,28 @@ datasource db {
 }
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String?
-  password String
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now()) @map("create_at")
+  updateAt  DateTime @updatedAt @map("update_at")
+  roles     Role[]
+  Token     Token[]
+
+  @@map("users")
+}
+
+model Token {
+  token  String   @unique
+  exp    DateTime
+  user   User     @relation(fields: [userId], references: [id])
+  userId Int
+
+  @@map("tokens")
+}
+
+enum Role {
+  ADMIN
+  USER
 }
