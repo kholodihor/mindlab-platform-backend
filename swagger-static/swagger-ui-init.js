@@ -10,7 +10,71 @@ window.onload = function() {
   let options = {
   "swaggerDoc": {
     "openapi": "3.0.0",
-    "paths": {},
+    "paths": {
+      "/user": {
+        "post": {
+          "operationId": "UserController_createUser",
+          "summary": "Створення користувача",
+          "parameters": [],
+          "responses": {
+            "201": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Users"
+          ]
+        }
+      },
+      "/user/{idOrEmail}": {
+        "get": {
+          "operationId": "UserController_findOneUser",
+          "summary": "Отримання користувача по ID чи по email",
+          "parameters": [
+            {
+              "name": "idOrEmail",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Users"
+          ]
+        }
+      },
+      "/user/{id}": {
+        "delete": {
+          "operationId": "UserController_deleteUser",
+          "summary": "Видалення користувача",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Users"
+          ]
+        }
+      }
+    },
     "info": {
       "title": "MindLab Platform example",
       "description": "The cows shelter API description",
