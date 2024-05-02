@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   Post,
+  Req,
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -12,8 +13,8 @@ import { LoginDto, RegisterDto } from './dto';
 import { AuthService } from './auth.service';
 import { Tokens } from './interfaces';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
-import { Cookie } from '../../libs/common/src/decorators';
+import { Response, Request } from 'express';
+import { Cookie, UserAgent } from '../../libs/common/src/decorators';
 
 const REFREST_TOKEN = 'refresh_token';
 
@@ -32,8 +33,13 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() dto: LoginDto, @Res() res: Response) {
-    const tokens = await this.authService.login(dto);
+  async login(
+    @Body() dto: LoginDto,
+    @Res() res: Response,
+    @UserAgent() agent: string,
+  ) {
+
+    const tokens = await this.authService.login(dto, agent);
     if (!tokens)
       throw new BadRequestException(`User with email ${dto.email} not entered`);
     this.setRefreshTokenToCookies(tokens, res);
@@ -43,10 +49,11 @@ export class AuthController {
   async refreshTokens(
     @Cookie(REFREST_TOKEN) refreshToken: string,
     @Res() res: Response,
+    @UserAgent() agent: string,
   ) {
     if (!refreshToken) throw new UnauthorizedException();
 
-    const tokens = await this.authService.refreshTokens(refreshToken);
+    const tokens = await this.authService.refreshTokens(refreshToken, agent);
     if (!tokens) throw new UnauthorizedException();
     this.setRefreshTokenToCookies(tokens, res);
   }
