@@ -24,6 +24,17 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
+  async refreshTokens(refreshToken: string): Promise<Tokens> {
+    const token = await this.prismaService.token.findUnique({
+      where: { token: refreshToken },
+    });
+    if (!token) throw new UnauthorizedException();
+    await this.prismaService.token.delete({ where: { token: refreshToken } });
+    if (new Date(token.exp) < new Date()) throw new UnauthorizedException();
+    const user = await this.usersService.findOne(token.userId);
+    return this.generateTokens(user);
+  }
+
   async register(dto: RegisterDto) {
     const user: User = await this.usersService
       .findOne(dto.email)
@@ -48,11 +59,17 @@ export class AuthService {
     if (!user || !compareSync(dto.password, user.password))
       throw new UnauthorizedException('Incorrect email or password');
 
-    const accessToken = 'Bearer ' + this.jwtService.sign({
-      id: user.id,
-      email: user.email,
-      roles: user.roles,
-    });
+    return this.generateTokens(user);
+  }
+
+  private async generateTokens(user: User): Promise<Tokens> {
+    const accessToken =
+      'Bearer ' +
+      this.jwtService.sign({
+        id: user.id,
+        email: user.email,
+        roles: user.roles,
+      });
 
     const refreshToken = await this.getRefreshToken(user.id);
     return {

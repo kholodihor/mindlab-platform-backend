@@ -116,7 +116,7 @@ window.onload = function() {
           }
         }
       },
-      "/auth/refresh": {
+      "/auth/refresh-tokens": {
         "get": {
           "operationId": "AuthController_refreshTokens",
           "parameters": [],
