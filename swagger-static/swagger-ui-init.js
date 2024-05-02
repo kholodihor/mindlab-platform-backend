@@ -73,6 +73,59 @@ window.onload = function() {
             "Users"
           ]
         }
+      },
+      "/auth/register": {
+        "post": {
+          "operationId": "AuthController_register",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/auth/login": {
+        "post": {
+          "operationId": "AuthController_login",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/auth/refresh": {
+        "get": {
+          "operationId": "AuthController_refreshTokens",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
       }
     },
     "info": {
@@ -89,7 +142,16 @@ window.onload = function() {
     ],
     "servers": [],
     "components": {
-      "schemas": {}
+      "schemas": {
+        "RegisterDto": {
+          "type": "object",
+          "properties": {}
+        },
+        "LoginDto": {
+          "type": "object",
+          "properties": {}
+        }
+      }
     }
   },
   "customOptions": {}
