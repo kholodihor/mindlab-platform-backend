@@ -101,6 +101,17 @@ window.onload = function() {
           }
         }
       },
+      "/auth/logout": {
+        "get": {
+          "operationId": "AuthController_logout",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          }
+        }
+      },
       "/auth/refresh-tokens": {
         "get": {
           "operationId": "AuthController_refreshTokens",
