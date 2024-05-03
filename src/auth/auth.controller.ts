@@ -1,35 +1,39 @@
 import {
   BadRequestException,
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpStatus,
   Post,
-  Req,
   Res,
   UnauthorizedException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { LoginDto, RegisterDto } from './dto';
 import { AuthService } from './auth.service';
 import { Tokens } from './interfaces';
 import { ConfigService } from '@nestjs/config';
-import { Response, Request } from 'express';
-import { Cookie, UserAgent } from '../../libs/common/src/decorators';
+import { Response } from 'express';
+import { Cookie, UserAgent, Public } from '../../libs/common/src/decorators';
+import { UserResponse } from '../user/responses';
 
 const REFREST_TOKEN = 'refresh_token';
 
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
   ) {}
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     const user = await this.authService.register(dto);
     if (!user)
       throw new BadRequestException(`User with email ${dto.email} not created`);
+    return new UserResponse(user);
   }
 
   @Post('login')
@@ -38,7 +42,6 @@ export class AuthController {
     @Res() res: Response,
     @UserAgent() agent: string,
   ) {
-
     const tokens = await this.authService.login(dto, agent);
     if (!tokens)
       throw new BadRequestException(`User with email ${dto.email} not entered`);

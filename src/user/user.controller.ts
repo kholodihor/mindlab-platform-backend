@@ -1,14 +1,19 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserResponse } from './responses';
 
 @ApiTags('Users')
 @Controller('user')
@@ -17,22 +22,27 @@ export class UserController {
 
   @ApiOperation({ summary: 'Створення користувача' })
   @ApiResponse({ status: 201 })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
-  createUser(@Body() dto) {
-    return this.userService.save(dto);
+  async createUser(@Body() dto) {
+    const user = await this.userService.save(dto);
+    return new UserResponse(user);
   }
 
   @ApiOperation({ summary: 'Отримання користувача по ID чи по email' })
   @ApiResponse({ status: 200 })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':idOrEmail')
-  findOneUser(@Param('idOrEmail') idOrEmail: string) {
-    return this.userService.findOne(idOrEmail);
+  async findOneUser(@Param('idOrEmail') idOrEmail: string) {
+    const user = await this.userService.findOne(idOrEmail);
+    return new UserResponse(user);
   }
 
   @ApiOperation({ summary: 'Видалення користувача' })
   @ApiResponse({ status: 204 })
   @Delete(':id')
-  deleteUser(@Param('id', ParseIntPipe) id: string) {
-    return this.userService.delete(id);
+  async deleteUser(@Param('id', ParseIntPipe) id: string) {
+    await this.userService.delete(id);
+    throw new HttpException(null, HttpStatus.NO_CONTENT);
   }
 }

@@ -46,9 +46,10 @@ export class UserService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    return {
-      status: HttpStatus.NO_CONTENT,
-    };
+    return this.prismaService.user.delete({
+      where: { id: Number(id) },
+      select: { id: true },
+    });
   }
 
   private hashPassword(password: string) {
