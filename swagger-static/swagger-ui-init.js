@@ -11,21 +11,6 @@ window.onload = function() {
   "swaggerDoc": {
     "openapi": "3.0.0",
     "paths": {
-      "/user": {
-        "post": {
-          "operationId": "UserController_createUser",
-          "summary": "Створення користувача",
-          "parameters": [],
-          "responses": {
-            "201": {
-              "description": ""
-            }
-          },
-          "tags": [
-            "Users"
-          ]
-        }
-      },
       "/user/{idOrEmail}": {
         "get": {
           "operationId": "UserController_findOneUser",
