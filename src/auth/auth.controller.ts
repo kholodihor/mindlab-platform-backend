@@ -15,18 +15,25 @@ import { AuthService } from './auth.service';
 import { Tokens } from './interfaces';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { Cookie, UserAgent, Public } from '../../libs/common/src/decorators';
+import { Cookie, Public, UserAgent } from '../../libs/common/src/decorators';
 import { UserResponse } from '../user/responses';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 const REFREST_TOKEN = 'refresh_token';
 
+@ApiTags('Auth')
 @Public()
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+  }
+
+  @ApiOperation({ summary: 'Реєстрація нового користувача' })
+  @ApiResponse({ status: 201 })
+  @ApiBody({ type: RegisterDto })
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
   async register(@Body() dto: RegisterDto) {
@@ -36,6 +43,9 @@ export class AuthController {
     return new UserResponse(user);
   }
 
+  @ApiOperation({ summary: 'Логін користувача' })
+  @ApiResponse({ status: 201 })
+  @ApiBody({ type: LoginDto })
   @Post('login')
   async login(
     @Body() dto: LoginDto,
@@ -48,12 +58,15 @@ export class AuthController {
     this.setRefreshTokenToCookies(tokens, res);
   }
 
+  @ApiOperation({ summary: 'Логаут користувача' })
+  @ApiResponse({ status: 200 })
   @Get('logout')
   async logout(@Cookie(REFREST_TOKEN) refreshToken: string, @Res() res: Response) {
     if (!refreshToken) {
       res.sendStatus(HttpStatus.NO_CONTENT);
       return;
-    };
+    }
+    ;
     await this.authService.deleteRefreshToken(refreshToken);
     res.cookie(REFREST_TOKEN, '', {
       httpOnly: true,
@@ -63,6 +76,8 @@ export class AuthController {
     res.sendStatus(HttpStatus.NO_CONTENT);
   }
 
+  @ApiOperation({ summary: 'Отримання рефреш токена' })
+  @ApiResponse({ status: 200 })
   @Get('refresh-tokens')
   async refreshTokens(
     @Cookie(REFREST_TOKEN) refreshToken: string,
@@ -89,4 +104,6 @@ export class AuthController {
     });
     res.status(HttpStatus.CREATED).json({ accessToken: tokens.accessToken });
   }
+
+
 }

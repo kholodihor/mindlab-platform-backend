@@ -59,9 +59,25 @@ window.onload = function() {
           ]
         }
       },
+      "/user/me": {
+        "get": {
+          "operationId": "UserController_me",
+          "summary": "Отримання поточного користувача",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Users"
+          ]
+        }
+      },
       "/auth/register": {
         "post": {
           "operationId": "AuthController_register",
+          "summary": "Реєстрація нового користувача",
           "parameters": [],
           "requestBody": {
             "required": true,
@@ -77,12 +93,16 @@ window.onload = function() {
             "201": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Auth"
+          ]
         }
       },
       "/auth/login": {
         "post": {
           "operationId": "AuthController_login",
+          "summary": "Логін користувача",
           "parameters": [],
           "requestBody": {
             "required": true,
@@ -98,29 +118,40 @@ window.onload = function() {
             "201": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Auth"
+          ]
         }
       },
       "/auth/logout": {
         "get": {
           "operationId": "AuthController_logout",
+          "summary": "Логаут користувача",
           "parameters": [],
           "responses": {
             "200": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Auth"
+          ]
         }
       },
       "/auth/refresh-tokens": {
         "get": {
           "operationId": "AuthController_refreshTokens",
+          "summary": "Отримання рефреш токена",
           "parameters": [],
           "responses": {
             "200": {
               "description": ""
             }
-          }
+          },
+          "tags": [
+            "Auth"
+          ]
         }
       }
     },
@@ -141,11 +172,59 @@ window.onload = function() {
       "schemas": {
         "RegisterDto": {
           "type": "object",
-          "properties": {}
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "example@example.com",
+              "description": "Email of the user"
+            },
+            "name": {
+              "type": "string",
+              "example": "John Doe",
+              "description": "Name of the user"
+            },
+            "password": {
+              "type": "string",
+              "example": "password123",
+              "description": "Password of the user"
+            },
+            "passwordRepeat": {
+              "type": "string",
+              "example": "password123",
+              "description": "Repeat password of the user"
+            }
+          },
+          "required": [
+            "email",
+            "name",
+            "password",
+            "passwordRepeat"
+          ]
         },
         "LoginDto": {
           "type": "object",
-          "properties": {}
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "example@example.com",
+              "description": "Email of the user"
+            },
+            "name": {
+              "type": "string",
+              "example": "John Doe",
+              "description": "Name of the user"
+            },
+            "password": {
+              "type": "string",
+              "example": "password123",
+              "description": "Password of the user"
+            }
+          },
+          "required": [
+            "email",
+            "name",
+            "password"
+          ]
         }
       }
     }
