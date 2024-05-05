@@ -9,8 +9,8 @@ import { STRATEGIES } from '../strategies';
 import { GUARDS } from './guards';
 
 @Module({
-  controllers: [AuthController],
-  providers: [AuthService, ...STRATEGIES, ...GUARDS],
-  imports: [PassportModule, JwtModule.registerAsync(options()), UserModule],
+    controllers: [AuthController],
+    providers: [AuthService, ...STRATEGIES, ...GUARDS],
+    imports: [PassportModule, JwtModule.registerAsync(options()), UserModule],
 })
 export class AuthModule {}
