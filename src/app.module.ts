@@ -10,24 +10,24 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
-    imports: [
-        ConfigModule.forRoot({ isGlobal: true }),
-        ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', 'swagger-static'),
-            serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger',
-        }),
-        CloudinaryModule,
-        UserModule,
-        PrismaModule,
-        AuthModule,
-        ConfigModule.forRoot({ isGlobal: true }),
-    ],
-    controllers: [],
-    providers: [
-        {
-            provide: APP_GUARD,
-            useClass: JwtAuthGuard,
-        },
-    ],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'swagger-static'),
+      serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger',
+    }),
+    CloudinaryModule,
+    UserModule,
+    PrismaModule,
+    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+  ],
+  controllers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

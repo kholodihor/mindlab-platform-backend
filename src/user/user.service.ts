@@ -73,7 +73,24 @@ export class UserService {
         });
     }
 
-    private hashPassword(password: string) {
-        return hashSync(password, 10);
+  async delete(id: string, user: JwtPayload) {
+    if (user.id !== id && !user.roles.includes(Role.ADMIN)) {
+      throw new ForbiddenException();
     }
+    const candidate = await this.findOne(id);
+    if (!candidate) {
+      throw new HttpException(
+        'Користувача не знайдено',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return this.prismaService.user.delete({
+      where: { id: Number(id) },
+      select: { id: true },
+    });
+  }
+
+  private hashPassword(password: string) {
+    return hashSync(password, 10);
+  }
 }
