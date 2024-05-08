@@ -209,7 +209,7 @@ window.onload = function() {
     },
     "info": {
       "title": "MindLab Platform example",
-      "description": "The cows shelter API description",
+      "description": "The mindlab platform API description",
       "version": "1.0",
       "contact": {}
     },
