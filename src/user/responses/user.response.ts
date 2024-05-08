@@ -12,12 +12,11 @@ export class UserResponse implements User {
   @Exclude()
   createdAt: Date;
 
-    @Exclude()
-    provider: Provider;
+  @Exclude()
+  provider: Provider;
 
-    updateAt: Date;
-    roles: Role[];
-
+  updateAt: Date;
+  roles: Role[];
 
   constructor(user: User) {
     Object.assign(this, user);

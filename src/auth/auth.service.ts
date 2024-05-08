@@ -1,10 +1,10 @@
 import {
-    ConflictException,
-    HttpException,
-    HttpStatus,
-    Injectable,
-    Logger,
-    UnauthorizedException,
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { LoginDto, RegisterDto } from './dto';
 import { UserService } from '../user/user.service';
@@ -51,13 +51,15 @@ export class AuthService {
     });
   }
 
-    async login(dto: LoginDto, agent: string): Promise<Tokens> {
-        const user: User = await this.usersService.findOne(dto.email, true).catch((err) => {
-            this.logger.error(err);
-            return null;
-        });
-        if (!user || !compareSync(dto.password, user.password))
-            throw new UnauthorizedException('Incorrect email or password');
+  async login(dto: LoginDto, agent: string): Promise<Tokens> {
+    const user: User = await this.usersService
+      .findOne(dto.email, true)
+      .catch((err) => {
+        this.logger.error(err);
+        return null;
+      });
+    if (!user || !compareSync(dto.password, user.password))
+      throw new UnauthorizedException('Incorrect email or password');
 
     return this.generateTokens(user, agent);
   }
@@ -98,20 +100,25 @@ export class AuthService {
     });
   }
 
-    async deleteRefreshToken(token: string) {
-        return this.prismaService.token.delete({ where: { token } });
-    }
+  async deleteRefreshToken(token: string) {
+    return this.prismaService.token.delete({ where: { token } });
+  }
 
-    async googleAuth(email: string, agent: string) {
-        const userExist = await this.usersService.findOne(email);
-        if (userExist) return this.generateTokens(userExist, agent);
+  async googleAuth(email: string, agent: string) {
+    const userExist = await this.usersService.findOne(email);
+    if (userExist) return this.generateTokens(userExist, agent);
 
-        const user = await this.usersService.save({ email, provider: Provider.GOOGLE }).catch((err) => {
-            this.logger.error(err);
-            return null;
-        });
-        if (!user)
-            throw new HttpException(`User with email ${email} not created in Google auth`, HttpStatus.BAD_REQUEST);
-        return this.generateTokens(user, agent);
-    }
+    const user = await this.usersService
+      .save({ email, provider: Provider.GOOGLE })
+      .catch((err) => {
+        this.logger.error(err);
+        return null;
+      });
+    if (!user)
+      throw new HttpException(
+        `User with email ${email} not created in Google auth`,
+        HttpStatus.BAD_REQUEST,
+      );
+    return this.generateTokens(user, agent);
+  }
 }
