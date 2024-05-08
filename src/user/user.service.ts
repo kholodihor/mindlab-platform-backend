@@ -23,12 +23,14 @@ export class UserService {
         }
 
         const hashedPassword = user?.password ? this.hashPassword(user.password) : null;
+
         return this.prismaService.user.create({
             data: {
                 email: user.email,
                 name: user.name,
                 password: hashedPassword,
                 roles: ['USER'],
+                provider: user?.provider,
             },
         });
     }

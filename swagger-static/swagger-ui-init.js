@@ -157,6 +157,7 @@ window.onload = function() {
       "/auth/google": {
         "get": {
           "operationId": "AuthController_googleAuth",
+          "summary": "Google аутентифікація",
           "parameters": [],
           "responses": {
             "200": {

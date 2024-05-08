@@ -100,6 +100,7 @@ export class AuthController {
         res.status(HttpStatus.CREATED).json({ accessToken: tokens.accessToken });
     }
 
+    @ApiOperation({ summary: 'Google аутентифікація' })
     @UseGuards(GoogleGuard)
     @Get('google')
     googleAuth() {}
