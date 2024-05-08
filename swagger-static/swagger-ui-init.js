@@ -153,6 +153,57 @@ window.onload = function() {
             "Auth"
           ]
         }
+      },
+      "/auth/google": {
+        "get": {
+          "operationId": "AuthController_googleAuth",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/auth/google/callback": {
+        "get": {
+          "operationId": "AuthController_googleAuthCallback",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/auth/success": {
+        "get": {
+          "operationId": "AuthController_success",
+          "parameters": [
+            {
+              "name": "token",
+              "required": true,
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
       }
     },
     "info": {

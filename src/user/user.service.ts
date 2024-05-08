@@ -22,7 +22,7 @@ export class UserService {
             throw new HttpException('Користувач з такою поштою вжє інсує', HttpStatus.BAD_REQUEST);
         }
 
-        const hashedPassword = this.hashPassword(user.password);
+        const hashedPassword = user?.password ? this.hashPassword(user.password) : null;
         return this.prismaService.user.create({
             data: {
                 email: user.email,
@@ -37,7 +37,6 @@ export class UserService {
         if (isReset) await this.cacheManager.del(idOrEmail);
         const user = await this.cacheManager.get<User>(idOrEmail);
         if (!user) {
-            console.log('fineOne-->',)
             const user = await this.prismaService.user.findFirst({
                 where: {
                     OR: [
