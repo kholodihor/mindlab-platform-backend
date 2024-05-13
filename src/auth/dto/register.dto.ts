@@ -3,22 +3,28 @@ import { IsPasswordsMatchingConstraint } from '../../../libs/common/src/decorato
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
-    @ApiProperty({ example: 'example@example.com', description: 'Email of the user' })
-    @IsEmail()
-    email: string;
+  @ApiProperty({
+    example: 'example@example.com',
+    description: 'Email of the user',
+  })
+  @IsEmail()
+  email: string;
 
-    @ApiProperty({ example: 'John Doe', description: 'Name of the user' })
-    @IsString()
-    name: string;
+  @ApiProperty({ example: 'John Doe', description: 'Name of the user' })
+  @IsString()
+  name: string;
 
-    @ApiProperty({ example: 'password123', description: 'Password of the user' })
-    @IsString()
-    @MinLength(6)
-    password: string;
+  @ApiProperty({ example: 'password123', description: 'Password of the user' })
+  @IsString()
+  @MinLength(6)
+  password: string;
 
-    @ApiProperty({ example: 'password123', description: 'Repeat password of the user' })
-    @IsString()
-    @MinLength(6)
-    @Validate(IsPasswordsMatchingConstraint)
-    passwordRepeat: string;
+  @ApiProperty({
+    example: 'password123',
+    description: 'Repeat password of the user',
+  })
+  @IsString()
+  @MinLength(6)
+  @Validate(IsPasswordsMatchingConstraint)
+  passwordRepeat: string;
 }

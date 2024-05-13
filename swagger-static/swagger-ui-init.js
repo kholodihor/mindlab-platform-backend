@@ -153,6 +153,21 @@ window.onload = function() {
             "Auth"
           ]
         }
+      },
+      "/auth/google": {
+        "get": {
+          "operationId": "AuthController_googleAuth",
+          "summary": "Google аутентифікація",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
       }
     },
     "info": {
