@@ -32,6 +32,11 @@ window.onload = function() {
           },
           "tags": [
             "Users"
+          ],
+          "security": [
+            {
+              "JWT-auth": []
+            }
           ]
         }
       },
@@ -56,6 +61,11 @@ window.onload = function() {
           },
           "tags": [
             "Users"
+          ],
+          "security": [
+            {
+              "JWT-auth": []
+            }
           ]
         }
       },
@@ -71,6 +81,11 @@ window.onload = function() {
           },
           "tags": [
             "Users"
+          ],
+          "security": [
+            {
+              "JWT-auth": []
+            }
           ]
         }
       },
@@ -176,14 +191,19 @@ window.onload = function() {
       "version": "1.0",
       "contact": {}
     },
-    "tags": [
-      {
-        "name": "mindlab",
-        "description": ""
-      }
-    ],
+    "tags": [],
     "servers": [],
     "components": {
+      "securitySchemes": {
+        "JWT-auth": {
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "type": "http",
+          "name": "JWT",
+          "description": "Enter JWT token",
+          "in": "header"
+        }
+      },
       "schemas": {
         "RegisterDto": {
           "type": "object",

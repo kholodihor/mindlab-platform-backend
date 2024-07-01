@@ -11,7 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {  ApiOperation, ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { UserResponse } from './responses';
 import { CurrentUser, Roles } from '../../libs/common/src/decorators';
 import { JwtPayload } from '../auth/interfaces';
@@ -20,6 +20,7 @@ import { Role } from '@prisma/client';
 
 @ApiTags('Users')
 @Controller('user')
+@ApiSecurity('JWT-auth')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -46,9 +47,9 @@ export class UserController {
   @ApiOperation({ summary: 'Отримання поточного користувача' })
   @ApiResponse({ status: 200 })
   @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
+  // @Roles(Role.ADMIN)
   @Get('me')
-  me(@CurrentUser() user: JwtPayload) {
+  async me(@CurrentUser() user: JwtPayload) {
     return user;
   }
 }

@@ -30,11 +30,20 @@ async function bootstrap() {
     .setTitle('MindLab Platform example')
     .setDescription('The mindlab platform API description')
     .setVersion('1.0')
-    .addTag('mindlab')
+      .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('/swagger', app, document);
+  SwaggerModule.setup('/swagger', app, document );
 
   const PORT = process.env.PORT || 4000;
   await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));
