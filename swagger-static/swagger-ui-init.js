@@ -227,13 +227,19 @@ window.onload = function() {
               "type": "string",
               "example": "password123",
               "description": "Repeat password of the user"
+            },
+            "avatar": {
+              "type": "string",
+              "example": "avatar.png",
+              "description": "Avatar of the user"
             }
           },
           "required": [
             "email",
             "name",
             "password",
-            "passwordRepeat"
+            "passwordRepeat",
+            "avatar"
           ]
         },
         "LoginDto": {

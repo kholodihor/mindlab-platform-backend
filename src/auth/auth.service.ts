@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -38,13 +37,6 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto) {
-    const user: User = await this.usersService
-      .findOne(dto.email)
-      .catch((err) => {
-        this.logger.error(err);
-        return null;
-      });
-    if (user) throw new ConflictException('User already exists');
     return this.usersService.save(dto).catch((err) => {
       this.logger.error(err);
       return null;

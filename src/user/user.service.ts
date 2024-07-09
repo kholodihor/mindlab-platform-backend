@@ -39,6 +39,7 @@ export class UserService {
       data: {
         email: user.email,
         name: user.name,
+        avatar: user?.avatar,
         password: hashedPassword,
         roles: ['USER'],
         provider: user?.provider,

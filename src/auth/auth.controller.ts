@@ -1,15 +1,15 @@
 import {
   BadRequestException,
   Body,
-  ClassSerializerInterceptor,
-  Controller,
-  Get,
-  HttpStatus,
+  ClassSerializerInterceptor, ConflictException,
+  Controller, FileTypeValidator,
+  Get, HttpException,
+  HttpStatus, MaxFileSizeValidator, ParseFilePipe,
   Post,
   Query,
   Req,
   Res,
-  UnauthorizedException,
+  UnauthorizedException, UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -31,6 +31,9 @@ import { GoogleGuard } from './guards/google.guard';
 import { HttpService } from '@nestjs/axios';
 import { map, mergeMap } from 'rxjs';
 import { handleTimeoutAndErrors } from '../../libs/common/src/helpers';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { UserService } from '../user/user.service';
 
 const REFREST_TOKEN = 'refresh_token';
 
@@ -42,6 +45,8 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly cloudinaryService: CloudinaryService,
+    private readonly usersService: UserService,
   ) {}
 
   @ApiOperation({ summary: 'Реєстрація нового користувача' })
@@ -49,8 +54,27 @@ export class AuthController {
   @ApiBody({ type: RegisterDto })
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
-  async register(@Body() dto: RegisterDto) {
-    const user = await this.authService.register(dto);
+  @UseInterceptors(FileInterceptor('avatar'))
+  async register(
+    @Body() dto: RegisterDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 }),
+          new FileTypeValidator({ fileType: '.(png|jpg|jpeg|webp)' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  )
+  {
+    const candidate = await this.usersService.findOne(dto.email, true);
+    if (candidate) throw new ConflictException('User already exists');
+    const uploadedAvatar = await this.cloudinaryService.uploadFile(file);
+    const user = await this.authService.register({
+      ...dto,
+      avatar: uploadedAvatar.url,
+    });
     if (!user)
       throw new BadRequestException(`User with email ${dto.email} not created`);
     return new UserResponse(user);

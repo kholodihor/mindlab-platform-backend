@@ -47,10 +47,11 @@ async function bootstrap() {
   SwaggerModule.setup('/swagger', app, document);
 
   const PORT = process.env.PORT || 4000;
+  console.log('PORT-->', PORT)
   await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));
 
   if (process.env.NODE_ENV === 'development') {
-    const serverUrl = 'http://localhost:4000';
+    const serverUrl = `http://localhost:${PORT}`;
 
     // write swagger ui files
     get(`${serverUrl}/swagger/swagger-ui-bundle.js`, function (response) {
