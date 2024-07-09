@@ -21,7 +21,7 @@ import { Request, Response } from 'express';
 import { Cookie, Public, UserAgent } from '../../libs/common/src/decorators';
 import { UserResponse } from '../user/responses';
 import {
-  ApiBody,
+  ApiBody, ApiConsumes,
   ApiExcludeEndpoint,
   ApiOperation,
   ApiResponse,
@@ -51,6 +51,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Реєстрація нового користувача' })
   @ApiResponse({ status: 201 })
+  @ApiConsumes('multipart/form-data')
   @ApiBody({ type: RegisterDto })
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')

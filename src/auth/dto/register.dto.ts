@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength, Validate } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MinLength, Validate } from 'class-validator';
 import { IsPasswordsMatchingConstraint } from '../../../libs/common/src/decorators/is-passwords-matching-constrain.decorator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -28,7 +28,10 @@ export class RegisterDto {
   @Validate(IsPasswordsMatchingConstraint)
   passwordRepeat: string;
 
-  @ApiProperty({ example: 'avatar.png', description: 'Avatar of the user' })
-  @IsString()
-  avatar: string;
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'Avatar of the user',
+  })
+  avatar: any;
 }

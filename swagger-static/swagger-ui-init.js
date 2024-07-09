@@ -97,7 +97,7 @@ window.onload = function() {
           "requestBody": {
             "required": true,
             "content": {
-              "application/json": {
+              "multipart/form-data": {
                 "schema": {
                   "$ref": "#/components/schemas/RegisterDto"
                 }
@@ -230,7 +230,7 @@ window.onload = function() {
             },
             "avatar": {
               "type": "string",
-              "example": "avatar.png",
+              "format": "binary",
               "description": "Avatar of the user"
             }
           },
