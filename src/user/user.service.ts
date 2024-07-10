@@ -39,6 +39,7 @@ export class UserService {
       data: {
         email: user.email,
         name: user.name,
+        avatar: user?.avatar,
         password: hashedPassword,
         roles: ['USER'],
         provider: user?.provider,
@@ -87,6 +88,21 @@ export class UserService {
     return this.prismaService.user.delete({
       where: { id: Number(id) },
       select: { id: true },
+    });
+  }
+
+  async updatePassword(id: string, newPassword: string) {
+    const candidate = await this.findOne(id);
+    if (!candidate) {
+      throw new HttpException(
+        'Користувача не знайдено',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.prismaService.user.update({
+      where: { id: Number(id) },
+      data: { ...candidate, password: this.hashPassword(newPassword) },
     });
   }
 

@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -15,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { v4 } from 'uuid';
 import { add } from 'date-fns';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,13 +38,6 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto) {
-    const user: User = await this.usersService
-      .findOne(dto.email)
-      .catch((err) => {
-        this.logger.error(err);
-        return null;
-      });
-    if (user) throw new ConflictException('User already exists');
     return this.usersService.save(dto).catch((err) => {
       this.logger.error(err);
       return null;
@@ -120,5 +113,9 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     return this.generateTokens(user, agent);
+  }
+
+  async changePassword(dto: ChangePasswordDto) {
+    return this.usersService.updatePassword(dto.id, dto.newPassword);
   }
 }

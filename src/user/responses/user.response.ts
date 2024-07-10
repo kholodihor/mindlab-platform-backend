@@ -5,6 +5,9 @@ export class UserResponse implements User {
   id: number;
   name: string;
   email: string;
+  avatar: string;
+  updateAt: Date;
+  roles: Role[];
 
   @Exclude()
   password: string;
@@ -14,9 +17,6 @@ export class UserResponse implements User {
 
   @Exclude()
   provider: Provider;
-
-  updateAt: Date;
-  roles: Role[];
 
   constructor(user: User) {
     Object.assign(this, user);
