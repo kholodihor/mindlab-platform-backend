@@ -91,6 +91,21 @@ export class UserService {
     });
   }
 
+  async updatePassword(id: string, newPassword: string) {
+    const candidate = await this.findOne(id);
+    if (!candidate) {
+      throw new HttpException(
+        'Користувача не знайдено',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.prismaService.user.update({
+      where: { id: Number(id) },
+      data: { ...candidate, password: this.hashPassword(newPassword) },
+    });
+  }
+
   private hashPassword(password: string) {
     return hashSync(password, 10);
   }

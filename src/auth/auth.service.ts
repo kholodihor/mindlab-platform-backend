@@ -14,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { v4 } from 'uuid';
 import { add } from 'date-fns';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -112,5 +113,9 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     return this.generateTokens(user, agent);
+  }
+
+  async changePassword(dto: ChangePasswordDto) {
+    return this.usersService.updatePassword(dto.id, dto.newPassword);
   }
 }

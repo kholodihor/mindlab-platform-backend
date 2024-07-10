@@ -1,15 +1,20 @@
 import {
   BadRequestException,
   Body,
-  ClassSerializerInterceptor, ConflictException,
-  Controller, FileTypeValidator,
-  Get, HttpException,
-  HttpStatus, MaxFileSizeValidator, ParseFilePipe,
+  ClassSerializerInterceptor,
+  ConflictException,
+  Controller,
+  FileTypeValidator,
+  Get,
+  HttpStatus,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   Query,
   Req,
   Res,
-  UnauthorizedException, UploadedFile,
+  UnauthorizedException,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -21,7 +26,8 @@ import { Request, Response } from 'express';
 import { Cookie, Public, UserAgent } from '../../libs/common/src/decorators';
 import { UserResponse } from '../user/responses';
 import {
-  ApiBody, ApiConsumes,
+  ApiBody,
+  ApiConsumes,
   ApiExcludeEndpoint,
   ApiOperation,
   ApiResponse,
@@ -34,6 +40,7 @@ import { handleTimeoutAndErrors } from '../../libs/common/src/helpers';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { UserService } from '../user/user.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 const REFREST_TOKEN = 'refresh_token';
 
@@ -67,8 +74,7 @@ export class AuthController {
       }),
     )
     file: Express.Multer.File,
-  )
-  {
+  ) {
     const candidate = await this.usersService.findOne(dto.email, true);
     if (candidate) throw new ConflictException('User already exists');
     const uploadedAvatar = await this.cloudinaryService.uploadFile(file);
@@ -93,7 +99,18 @@ export class AuthController {
     const tokens = await this.authService.login(dto, agent);
     if (!tokens)
       throw new BadRequestException(`User with email ${dto.email} not entered`);
-    this.setRefreshTokenToCookies(tokens, res);
+    await this.setRefreshTokenToCookies(tokens, res);
+    const user = await this.usersService.findOne(dto.email);
+    return res.status(HttpStatus.CREATED).json({
+      accessToken: tokens.accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        roles: user.roles,
+        avatar: user.avatar,
+      },
+    });
   }
 
   @ApiOperation({ summary: 'Логаут користувача' })
@@ -116,6 +133,16 @@ export class AuthController {
     res.sendStatus(HttpStatus.NO_CONTENT);
   }
 
+  @ApiOperation({ summary: 'Зміна паролю' })
+  @ApiResponse({ status: 201 })
+  @ApiBody({ type: ChangePasswordDto })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('change-password')
+  async changePassword(@Body() dto: ChangePasswordDto) {
+    const user = await this.authService.changePassword(dto);
+    return new UserResponse(user);
+  }
+
   @ApiOperation({ summary: 'Отримання рефреш токена' })
   @ApiResponse({ status: 200 })
   @Get('refresh-tokens')
@@ -131,7 +158,7 @@ export class AuthController {
     this.setRefreshTokenToCookies(tokens, res);
   }
 
-  private setRefreshTokenToCookies(tokens: Tokens, res: Response) {
+  private async setRefreshTokenToCookies(tokens: Tokens, res: Response) {
     if (!tokens) throw new UnauthorizedException();
 
     res.cookie(REFREST_TOKEN, tokens.refreshToken.token, {
@@ -142,7 +169,7 @@ export class AuthController {
         this.configService.get('NODE_ENV', 'development') === 'production',
       path: '/',
     });
-    res.status(HttpStatus.CREATED).json({ accessToken: tokens.accessToken });
+    // res.status(HttpStatus.CREATED).json({ accessToken: tokens.accessToken });
   }
 
   @ApiOperation({ summary: 'Google аутентифікація' })

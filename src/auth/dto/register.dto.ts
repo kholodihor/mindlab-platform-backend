@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MinLength, Validate } from 'class-validator';
+import { IsEmail, IsString, MinLength, Validate } from 'class-validator';
 import { IsPasswordsMatchingConstraint } from '../../../libs/common/src/decorators/is-passwords-matching-constrain.decorator';
 import { ApiProperty } from '@nestjs/swagger';
 
