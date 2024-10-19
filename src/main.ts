@@ -30,17 +30,28 @@ async function bootstrap() {
     .setTitle('MindLab Platform example')
     .setDescription('The mindlab platform API description')
     .setVersion('1.0')
-    .addTag('mindlab')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('/swagger', app, document);
 
   const PORT = process.env.PORT || 4000;
+
   await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));
 
   if (process.env.NODE_ENV === 'development') {
-    const serverUrl = 'http://localhost:4000';
+    const serverUrl = `http://localhost:${PORT}`;
 
     // write swagger ui files
     get(`${serverUrl}/swagger/swagger-ui-bundle.js`, function (response) {

@@ -32,6 +32,11 @@ window.onload = function() {
           },
           "tags": [
             "Users"
+          ],
+          "security": [
+            {
+              "JWT-auth": []
+            }
           ]
         }
       },
@@ -56,6 +61,11 @@ window.onload = function() {
           },
           "tags": [
             "Users"
+          ],
+          "security": [
+            {
+              "JWT-auth": []
+            }
           ]
         }
       },
@@ -71,6 +81,11 @@ window.onload = function() {
           },
           "tags": [
             "Users"
+          ],
+          "security": [
+            {
+              "JWT-auth": []
+            }
           ]
         }
       },
@@ -82,7 +97,7 @@ window.onload = function() {
           "requestBody": {
             "required": true,
             "content": {
-              "application/json": {
+              "multipart/form-data": {
                 "schema": {
                   "$ref": "#/components/schemas/RegisterDto"
                 }
@@ -131,6 +146,31 @@ window.onload = function() {
           "parameters": [],
           "responses": {
             "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/auth/change-password": {
+        "post": {
+          "operationId": "AuthController_changePassword",
+          "summary": "Зміна паролю",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
               "description": ""
             }
           },
@@ -284,14 +324,19 @@ window.onload = function() {
       "version": "1.0",
       "contact": {}
     },
-    "tags": [
-      {
-        "name": "mindlab",
-        "description": ""
-      }
-    ],
+    "tags": [],
     "servers": [],
     "components": {
+      "securitySchemes": {
+        "JWT-auth": {
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "type": "http",
+          "name": "JWT",
+          "description": "Enter JWT token",
+          "in": "header"
+        }
+      },
       "schemas": {
         "RegisterDto": {
           "type": "object",
@@ -315,13 +360,19 @@ window.onload = function() {
               "type": "string",
               "example": "password123",
               "description": "Repeat password of the user"
+            },
+            "avatar": {
+              "type": "string",
+              "format": "binary",
+              "description": "Avatar of the user"
             }
           },
           "required": [
             "email",
             "name",
             "password",
-            "passwordRepeat"
+            "passwordRepeat",
+            "avatar"
           ]
         },
         "LoginDto": {
@@ -347,6 +398,31 @@ window.onload = function() {
             "email",
             "name",
             "password"
+          ]
+        },
+        "ChangePasswordDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "25",
+              "description": "ID of the user"
+            },
+            "password": {
+              "type": "string",
+              "example": "password123",
+              "description": "Password of the user"
+            },
+            "newPassword": {
+              "type": "string",
+              "example": "password555",
+              "description": "New password of the user"
+            }
+          },
+          "required": [
+            "id",
+            "password",
+            "newPassword"
           ]
         }
       }

@@ -27,4 +27,11 @@ export class RegisterDto {
   @MinLength(6)
   @Validate(IsPasswordsMatchingConstraint)
   passwordRepeat: string;
+
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'Avatar of the user',
+  })
+  avatar: any;
 }

@@ -8,6 +8,7 @@ import { options } from './config';
 import { STRATEGIES } from '../strategies';
 import { GUARDS } from './guards';
 import { HttpModule } from '@nestjs/axios';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 @Module({
   controllers: [AuthController],
@@ -17,6 +18,7 @@ import { HttpModule } from '@nestjs/axios';
     JwtModule.registerAsync(options()),
     UserModule,
     HttpModule,
+    CloudinaryModule,
   ],
 })
 export class AuthModule {}
