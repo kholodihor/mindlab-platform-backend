@@ -168,6 +168,114 @@ window.onload = function() {
             "Auth"
           ]
         }
+      },
+      "/events": {
+        "post": {
+          "operationId": "EventsController_createEvent",
+          "summary": "Create a new event",
+          "parameters": [],
+          "responses": {
+            "201": {
+              "description": "The event has been successfully created."
+            },
+            "400": {
+              "description": "Invalid data for creating event."
+            }
+          },
+          "tags": [
+            "Events"
+          ]
+        },
+        "get": {
+          "operationId": "EventsController_findAllEvents",
+          "summary": "Retrieve all events",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "List of events retrieved successfully."
+            }
+          },
+          "tags": [
+            "Events"
+          ]
+        }
+      },
+      "/events/{id}": {
+        "get": {
+          "operationId": "EventsController_findOneEvent",
+          "summary": "Retrieve a specific event by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Event retrieved successfully."
+            },
+            "404": {
+              "description": "Event not found."
+            }
+          },
+          "tags": [
+            "Events"
+          ]
+        },
+        "patch": {
+          "operationId": "EventsController_updateEvent",
+          "summary": "Update an existing event",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The event has been successfully updated."
+            },
+            "404": {
+              "description": "Event not found."
+            }
+          },
+          "tags": [
+            "Events"
+          ]
+        },
+        "delete": {
+          "operationId": "EventsController_deleteEvent",
+          "summary": "Delete an event by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "The event has been successfully deleted."
+            },
+            "404": {
+              "description": "Event not found."
+            }
+          },
+          "tags": [
+            "Events"
+          ]
+        }
       }
     },
     "info": {
